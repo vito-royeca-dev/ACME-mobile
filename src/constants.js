@@ -1,0 +1,2 @@
+export const MAP_PK_TOKEN = "pk.eyJ1IjoibWlrZWthbGUiLCJhIjoiY2x4Z2JsdzZiMTIzbjJrcHdxbDNhdTgzZSJ9.BSu0Xe1lgIgxULBXXQlEBQ";
+export const CLIENT_ID = "308321760522-80c3t3bok4u6r45g1h2rfltkv4g8ebv9.apps.googleusercontent.com";
