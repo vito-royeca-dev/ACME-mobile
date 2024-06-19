@@ -2,10 +2,7 @@ import MapboxGL, { MarkerView } from '@rnmapbox/maps';
 import React, { memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { useLocation } from '../hooks/useLocation';
-
-export const UserAnnotation = () => {
-  let location = useLocation();
+export const UserAnnotation = ({location}) => {
   const userLocationGeoJSON = {
     type: 'FeatureCollection',
     features: [

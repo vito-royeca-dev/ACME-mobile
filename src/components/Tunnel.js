@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import { getRoute } from '../lib/apis';
-
 export const Tunnel = ({ startCoords, endCoords, lineColor = '#FF0000', opacity = 1, id = 1 }) => {
   const [routeCoords, setRouteCoords] = useState([]);
 
   useEffect(() => {
     const fetchRoute = async () => {
-      const {coordinates} = await getRoute(startCoords, endCoords);
-      setRouteCoords(coordinates);
+      const routes = await getRoute(startCoords, endCoords);
+      if (routes?.length > 0) {
+        setRouteCoords(routes[0].geometry.coordinates);
+      }
     };
 
     fetchRoute();
-  }, [startCoords, endCoords]); // Depend on coordinates to refetch when they change
+  }, []); // Depend on coordinates to refetch when they change
 
   return (
     <>

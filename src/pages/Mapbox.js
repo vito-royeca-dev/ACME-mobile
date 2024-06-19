@@ -6,7 +6,6 @@ import Zones from '../components/Zones';
 import Tunnels from '../components/Tunnels';
 import UserAnnotation from '../components/UserAnnotation';
 import SelectedTunnels from '../components/SelectedTunnels';
-import ViewInfo from '../components/ViewInfo';
 
 import { useMapData } from '../hooks/useMapData';
 import { useCamera } from '../hooks/useCamera';
@@ -21,7 +20,6 @@ const MapboxScreen = () => {
   const {tunnels, zones} = useMapData();
   const {viewInfo, handleCameraChange} = useViewinfo();
   const {cameraRef, handleZoomIn, handleZoomOut} = useCamera();
-  const location = useLocation();
   
   useEffect(() => {
     MapboxGL.setAccessToken(MAP_PK_TOKEN);
@@ -44,8 +42,7 @@ const MapboxScreen = () => {
           />
           <Tunnels tunnels={tunnels} />
           <Zones zones={zones}/>
-          <UserAnnotation location={location}/>
-          <SelectedTunnels endCoords={selectedLocation}/>
+          <SelectedTunnels endCoords={selectedLocation} tunnels={tunnels} zones={zones}/>
         </MapboxGL.MapView>
         <View style={styles.location}>
         <Text>Lat: {viewInfo.latitude.toFixed(1)} | Lng: {viewInfo.longitude.toFixed(2)} | Zoom: {viewInfo.zoomLevel.toFixed(2)}</Text>

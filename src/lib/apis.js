@@ -64,31 +64,18 @@ export const signIn = async (callback) => {
   }
 }
 
-export const getRoute = async (startCoords, endCoords) => {
-  let errReturn = { coordinates: [], distance: 0 };
-
-  if (!startCoords?.length || !endCoords?.length){
-    console.log(2222222222222222222222222);
-    return errReturn;
+export const getRoute = async (startCoords, endCoords, alternative=false) => {
+  if (!startCoords || !endCoords) {
+    return [];
   }
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${String(startCoords[0])},${String(startCoords[1])};${String(endCoords[0])},${String(endCoords[1])}?geometries=geojson&alternatives=${alternative}&access_token=${MAP_PK_TOKEN}`;
 
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${String(startCoords[0])},${String(startCoords[1])};${String(endCoords[0])},${String(endCoords[1])}?geometries=geojson&access_token=${MAP_PK_TOKEN}`;
-  
   try {
     const response = await fetch(url);
     const json = await response.json();
-
-    if (json.code !== "Ok") {
-      return errReturn;
-    }
-    
-    const routeCoordinates = json.routes[0]?.geometry?.coordinates;
-    const routeDistance = json.routes[0]?.distance; // Distance in meters
-    
-    return { coordinates: routeCoordinates, distance: routeDistance };
-    
+    return json.routes;
   } catch (error) {
     console.log('Error fetching route:', error);
-    return errReturn;
+    return [];
   }
 };
