@@ -13,7 +13,7 @@ export const Zones = ({zones}) => {
           type: 'Feature',
           geometry: {
             type: 'Polygon',
-            coordinates: [createCirclePolygon([Number(zone.centerLng), Number(zone.centerLat)], Number(zone.radius) * 1609.34)], // Convert miles to meters for radius
+            coordinates: [createCirclePolygon([Number(zone.centerLng), Number(zone.centerLat)], Number(zone.radius))], // Convert miles to meters for radius
           },
         }}
       >

@@ -8,12 +8,13 @@ const instance = Axios.create({
     baseURL: 'http://localhost:5000',
 })
 
-export const fetchTunnels = async (callback) => {
+export const fetchTunnels = async () => {
     try {
       const response = await instance.get('/api/tunnels');
-      callback(response.data);
+      return response.data;
     } catch (error) {
       console.error('Error fetching tunnels:', error);
+      return [];
     }
 };
 
@@ -23,23 +24,19 @@ export const fetchZones = async (callback) => {
       callback(response.data);
     } catch (error) {
       console.error('Error fetching zones:', error);
+      callback([]);
     }
 };
 
 export const signIn = async (callback) => { 
   try {
-    console.log(1111111111111);
     await GoogleSignin.hasPlayServices();
-    console.log(222222);
 
     const userInfo = await GoogleSignin.signIn();
-    console.log(333333333);
-
-
     // Send ID token to server
     const idToken = userInfo.idToken;
     const platform = Platform.OS;
-    console.log(platform, idToken);
+
     const response = await fetch('http://localhost:5000/auth/google', {
       method: 'POST',
       headers: {
@@ -50,7 +47,7 @@ export const signIn = async (callback) => {
         platform,
       }),
     });
-    console.log(444444);
+
     const data = await response.json();
     console.log(data);
     if (response.ok) {

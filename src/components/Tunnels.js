@@ -8,8 +8,7 @@ export const Tunnels = ({tunnels}) => {
       <Tunnel 
         key={tunnel._id}
         id={tunnel._id}
-        startCoords={[tunnel.startLng, tunnel.startLat]}
-        endCoords={[tunnel.endLng, tunnel.endLat]}
+        coordinates={tunnel.coordinates}
         lineColor={tunnel.color}
         opacity={tunnel.opacity}
       />

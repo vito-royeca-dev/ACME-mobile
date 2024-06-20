@@ -4,7 +4,6 @@ import MapboxGL from '@rnmapbox/maps'; // Import from '@rnmapbox/maps' for older
 
 import Zones from '../components/Zones';
 import Tunnels from '../components/Tunnels';
-import UserAnnotation from '../components/UserAnnotation';
 import SelectedTunnels from '../components/SelectedTunnels';
 
 import { useMapData } from '../hooks/useMapData';
@@ -17,7 +16,7 @@ import { styles } from '../stylesheet/mapbox';
 
 const MapboxScreen = () => {
   const [selectedLocation, setSelectedLocation] = useState();
-  const {tunnels, zones} = useMapData();
+  const {tunnelInfos, zones} = useMapData();
   const {viewInfo, handleCameraChange} = useViewinfo();
   const {cameraRef, handleZoomIn, handleZoomOut} = useCamera();
   
@@ -40,15 +39,15 @@ const MapboxScreen = () => {
           <MapboxGL.Camera
             ref={cameraRef}
           />
-          <Tunnels tunnels={tunnels} />
+          <Tunnels tunnels={tunnelInfos} />
           <Zones zones={zones}/>
-          <SelectedTunnels endCoords={selectedLocation} tunnels={tunnels} zones={zones}/>
+          <SelectedTunnels endCoords={selectedLocation} tunnels={tunnelInfos} zones={zones}/>
         </MapboxGL.MapView>
         <View style={styles.location}>
         <Text>Lat: {viewInfo.latitude.toFixed(1)} | Lng: {viewInfo.longitude.toFixed(2)} | Zoom: {viewInfo.zoomLevel.toFixed(2)}</Text>
       </View>
       <View style={styles.zoomControls}>
-        <TouchableOpacity style={styles.zoomButton} onPress={() => {handleZoomIn(viewInfo.zoomLevel); console.log(4);}}>
+        <TouchableOpacity style={styles.zoomButton} onPress={() => {handleZoomIn(viewInfo.zoomLevel)}}>
           <Text style={styles.zoomText}>+</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.zoomButton} onPress={() => handleZoomOut(viewInfo.zoomLevel)}>

@@ -2,7 +2,15 @@
   "expo": {
     "name": "ACME-MOB",
     "slug": "ACME-MOB",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ]
   },
   "name": "ACME-MOB"
 }

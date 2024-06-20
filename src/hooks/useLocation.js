@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import { requestPermissions } from '../utils/mapbox';
+Geolocation.setRNConfiguration({skipPermissionRequests: true});
 
 export const useLocation = () => {
   const [location, setLocation] = useState({latitude: 40.32, longitude: 90.34});
@@ -16,25 +17,24 @@ export const useLocation = () => {
 
       Geolocation.getCurrentPosition(
         (position) => {
+          console.log("first user position is :", position.coords);
           const { latitude, longitude } = position.coords;
           setLocation({ latitude, longitude });
         },
-        (error) => {
-          console.error('Error getting current position:', error);
+        err => {
+          console.log(err);
         },
-        { enableHighAccuracy: true, timeout: 30000, maximumAge: 10000 }
       );
 
       const watchId = Geolocation.watchPosition(
         (position) => {
+          console.log("user is moving!!!!");
           const { latitude, longitude } = position.coords;
           setLocation({ latitude, longitude });
-       
         },
-        (error) => {
-          console.error('Error watching position:', error);
+        err => {
+          console.log(err);
         },
-        { enableHighAccuracy: true, distanceFilter: 0, interval: 5000 }
       );
 
       return () => {
@@ -44,6 +44,10 @@ export const useLocation = () => {
 
     getLocation();
   }, []);
+
+  useEffect(() => {
+    
+  }, [location]);
 
   return [location?.longitude, location?.latitude];
 };
