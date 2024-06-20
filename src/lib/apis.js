@@ -76,7 +76,10 @@ export const getRoute = async (startCoords, endCoords, alternative=false) => {
   if (!startCoords || !endCoords) {
     return [];
   }
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${String(startCoords[0])},${String(startCoords[1])};${String(endCoords[0])},${String(endCoords[1])}?geometries=geojson&alternatives=${alternative}&access_token=${MAP_PK_TOKEN}`;
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/
+    ${String(startCoords[0])},${String(startCoords[1])};
+    ${String(endCoords[0])},${String(endCoords[1])}
+    ?geometries=geojson&alternatives=${alternative}&access_token=${MAP_PK_TOKEN}`;
 
   try {
     const response = await fetch(url);

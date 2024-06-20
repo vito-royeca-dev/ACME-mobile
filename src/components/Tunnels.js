@@ -1,4 +1,3 @@
-import MapboxGL from "@rnmapbox/maps";
 import { Tunnel } from "./Tunnel";
 import { memo } from "react";
 

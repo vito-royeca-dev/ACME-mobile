@@ -13,7 +13,6 @@ export const useMapData = () => {
     const fetchTunnelInfos = async () => {
 
       const tunnels = await fetchTunnels();
-      console.log(JSON.stringify(tunnels), "********************************************************");
 
       if (tunnels.length > 0) {
         // Filter visible tunnels and get their routes
@@ -33,7 +32,6 @@ export const useMapData = () => {
         // Wait for all promises to resolve
         const tunnelData = await Promise.all(tunnelDataPromises);
         setTunnelInfos(tunnelData);
-        console.log(JSON.stringify(tunnelData), "********************************************************");
       } else {
         setTunnelInfos([]);
       }

@@ -1,6 +1,5 @@
 import { Platform, PermissionsAndroid } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import {  point as geoPoint, distance as turfDistance } from '@turf/turf';
 
 const toRadians = (degrees) => degrees * Math.PI / 180;
 const earthRadiusMiles = 3958.8;
@@ -54,7 +53,6 @@ export const createCirclePolygon = (center, radius) => {
   ret.push(ret[0]); // Close the polygon
   return ret;
 };
-
 
 const polylineToSegments = (polyline) => {
   const segments = [];
@@ -134,8 +132,8 @@ const pointOnRoute = (point, route, tolerance) => {
 };
 
 const routeOnRoute = (baseRouteinfo, comparisonRoute) => {
-  const tolerance = baseRouteinfo.distance * 0.01; // Set tolerance as 1% of the total route length
-
+  const tolerance = baseRouteinfo.distance * 0.000621371 * 0.005; // Set tolerance as 1% of the total route length
+  // console.log(baseRouteinfo?.geometry?.coordinates.length, tolerance, comparisonRoute.length);
   for (const point of comparisonRoute) {
       if (!pointOnRoute(point, baseRouteinfo?.geometry?.coordinates, tolerance)) {
           return false;
@@ -166,7 +164,6 @@ export const calculateCircleCredits = (circles, routes) => {
 
 export const calculateTunnelCredits = (baseRouteinfo, tunnels) => {
   let total = 0;
-
   tunnels.map(comparationTunnel => {
     if (routeOnRoute(baseRouteinfo, comparationTunnel.coordinates)) {
         total += comparationTunnel.credits;
@@ -177,7 +174,8 @@ export const calculateTunnelCredits = (baseRouteinfo, tunnels) => {
 }
 
 export const calculateCredits = (baseRoute, circles, tunnels) => {
-  console.log(calculateCircleCredits(circles, baseRoute?.geometry?.coordinates), "====circle=====");
-  return calculateCircleCredits(circles, baseRoute?.geometry?.coordinates) + 
-        calculateTunnelCredits(baseRoute, tunnels);
+  const circleCredits = calculateCircleCredits(circles, baseRoute?.geometry?.coordinates);
+  const  tunnelCredits = calculateTunnelCredits(baseRoute, tunnels);
+
+  return circleCredits + tunnelCredits;
 }

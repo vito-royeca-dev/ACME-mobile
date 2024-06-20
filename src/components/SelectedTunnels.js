@@ -2,12 +2,13 @@ import React, { memo, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
+import UserAnnotation from './UserAnnotation';
+
 import { useLocation } from '../hooks/useLocation';
 
-import { calculateCircleCredits, calculateCredits, formatDistance, formatDuration } from '../utils/mapbox';
+import { calculateCredits, formatDistance, formatDuration } from '../utils/mapbox';
 import { getRoute } from '../lib/apis';
 import { styles } from '../stylesheet/selectedTunnels';
-import UserAnnotation from './UserAnnotation';
 
 const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
     const fetchRoute = async () => {
       const routes = await getRoute(location, endCoords, true);
       const [data, data1] = routes;
+      
       if (!data) {
         setRouteInfo(null);
         setRouteInfo1(null);
@@ -47,6 +49,8 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
         duration: formatDuration(data1?.duration),
         credits: calculateCredits(data1, zones, tunnels),
       });
+      console.log("route1=====", data?.geometry?.coordinates);
+      console.log("route2====", data?.geometry?.coordinates);
     };
     fetchRoute();
   }, [endCoords]); // Depend on coordinates to refetch when they change

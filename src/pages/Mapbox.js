@@ -9,7 +9,6 @@ import SelectedTunnels from '../components/SelectedTunnels';
 import { useMapData } from '../hooks/useMapData';
 import { useCamera } from '../hooks/useCamera';
 import { useViewinfo } from '../hooks/useViewInfo';
-import { useLocation } from '../hooks/useLocation';
 
 import { MAP_PK_TOKEN } from '../constants';
 import { styles } from '../stylesheet/mapbox';
