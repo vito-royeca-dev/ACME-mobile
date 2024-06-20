@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
@@ -28,20 +28,31 @@ export const fetchZones = async (callback) => {
 
 export const signIn = async (callback) => { 
   try {
+    console.log(1111111111111);
     await GoogleSignin.hasPlayServices();
+    console.log(222222);
+
     const userInfo = await GoogleSignin.signIn();
+    console.log(333333333);
+
 
     // Send ID token to server
     const idToken = userInfo.idToken;
+    const platform = Platform.OS;
+    console.log(platform, idToken);
     const response = await fetch('http://localhost:5000/auth/google', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify({ 
+        idToken,
+        platform,
+      }),
     });
-
+    console.log(444444);
     const data = await response.json();
+    console.log(data);
     if (response.ok) {
       // Store user info and token
       await AsyncStorage.setItem('user', JSON.stringify(userInfo));

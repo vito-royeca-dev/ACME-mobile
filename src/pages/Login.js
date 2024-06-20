@@ -3,11 +3,12 @@ import { View, Image, ImageBackground, Animated, TouchableOpacity, Text } from '
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { signIn } from '../lib/apis';
-import { CLIENT_ID } from '../constants';
+import { IOS_CLIENT_ID, ANDROID_CKIENT_ID } from '../constants';
 import { styles } from '../stylesheet/login';
 
 GoogleSignin.configure({
-  iosClientId: CLIENT_ID, // From Google Console
+  androidClientId: ANDROID_CKIENT_ID,
+  iosClientId: IOS_CLIENT_ID, // From Google Console
 });
 
 const LoginScreen = ({ onLogin }) => {
