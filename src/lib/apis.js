@@ -2,10 +2,10 @@ import { Alert, Platform } from "react-native";
 import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { MAP_PK_TOKEN } from "../constants";
+import { BACKEND_URL, MAP_PK_TOKEN } from "../constants";
 
 const instance = Axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: BACKEND_URL,
 })
 
 export const fetchTunnels = async () => {
@@ -49,10 +49,10 @@ export const signIn = async (callback) => {
     });
 
     const data = await response.json();
-    console.log(data);
     if (response.ok) {
       // Store user info and token
-      await AsyncStorage.setItem('user', JSON.stringify(userInfo));
+      console.log(data.id);
+      await AsyncStorage.setItem('user', data.id);
       await AsyncStorage.setItem('token', data.token);
       Alert.alert('Sign-In Successful', `Welcome to the app! ${userInfo.user.givenName}!`);
       callback(); // Notify App component to re-check login status

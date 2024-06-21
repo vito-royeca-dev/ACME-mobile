@@ -14,13 +14,16 @@
     "@react-native-google-signin/google-signin": "^12.2.1",
     "@rnmapbox/maps": "^10.1.27",
     "@turf/turf": "^7.0.0",
+    "@types/react": "~18.2.79",
     "axios": "^1.7.2",
     "expo": "~51.0.14",
     "expo-location": "~17.0.1",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-native": "0.74.2",
-    "react-native-device-info": "^11.1.0"
+    "react-native-device-info": "^11.1.0",
+    "socket.io-client": "^4.7.5",
+    "typescript": "~5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -17,7 +17,6 @@ export const useLocation = () => {
 
       Geolocation.getCurrentPosition(
         (position) => {
-          console.log("first user position is :", position.coords);
           const { latitude, longitude } = position.coords;
           setLocation({ latitude, longitude });
         },
@@ -28,7 +27,6 @@ export const useLocation = () => {
 
       const watchId = Geolocation.watchPosition(
         (position) => {
-          console.log("user is moving!!!!");
           const { latitude, longitude } = position.coords;
           setLocation({ latitude, longitude });
         },
@@ -36,11 +34,12 @@ export const useLocation = () => {
           console.log(err);
         },
       );
-
+     
       return () => {
         Geolocation.clearWatch(watchId);
       };
     };
+    
 
     getLocation();
   }, []);
@@ -49,5 +48,5 @@ export const useLocation = () => {
     
   }, [location]);
 
-  return [location?.longitude, location?.latitude];
+  return [[location?.longitude, location?.latitude]];
 };

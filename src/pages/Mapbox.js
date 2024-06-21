@@ -18,10 +18,8 @@ const MapboxScreen = () => {
   const {tunnelInfos, zones} = useMapData();
   const {viewInfo, handleCameraChange} = useViewinfo();
   const {cameraRef, handleZoomIn, handleZoomOut} = useCamera();
-  
   useEffect(() => {
     MapboxGL.setAccessToken(MAP_PK_TOKEN);
-    // console.log(location, 111111111111111111111);
   }, []);
 
   return (
@@ -40,19 +38,19 @@ const MapboxScreen = () => {
           />
           <Tunnels tunnels={tunnelInfos} />
           <Zones zones={zones}/>
-          <SelectedTunnels endCoords={selectedLocation} tunnels={tunnelInfos} zones={zones}/>
+          <SelectedTunnels endCoords={selectedLocation} tunnels={tunnelInfos} zones={zones} />
         </MapboxGL.MapView>
         <View style={styles.location}>
-        <Text>Lat: {viewInfo.latitude.toFixed(1)} | Lng: {viewInfo.longitude.toFixed(2)} | Zoom: {viewInfo.zoomLevel.toFixed(2)}</Text>
-      </View>
-      <View style={styles.zoomControls}>
-        <TouchableOpacity style={styles.zoomButton} onPress={() => {handleZoomIn(viewInfo.zoomLevel)}}>
-          <Text style={styles.zoomText}>+</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.zoomButton} onPress={() => handleZoomOut(viewInfo.zoomLevel)}>
-          <Text style={styles.zoomText}>-</Text>
-        </TouchableOpacity>
-      </View>
+          <Text>Lat: {viewInfo.latitude.toFixed(1)} | Lng: {viewInfo.longitude.toFixed(2)} | Zoom: {viewInfo.zoomLevel.toFixed(2)}</Text>
+        </View>
+        <View style={styles.zoomControls}>
+          <TouchableOpacity style={styles.zoomButton} onPress={() => {handleZoomIn(viewInfo.zoomLevel)}}>
+            <Text style={styles.zoomText}>+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.zoomButton} onPress={() => handleZoomOut(viewInfo.zoomLevel)}>
+            <Text style={styles.zoomText}>-</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

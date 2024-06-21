@@ -133,7 +133,6 @@ const pointOnRoute = (point, route, tolerance) => {
 
 const routeOnRoute = (baseRouteinfo, comparisonRoute) => {
   const tolerance = baseRouteinfo.distance * 0.000621371 * 0.005; // Set tolerance as 1% of the total route length
-  // console.log(baseRouteinfo?.geometry?.coordinates.length, tolerance, comparisonRoute.length);
   for (const point of comparisonRoute) {
       if (!pointOnRoute(point, baseRouteinfo?.geometry?.coordinates, tolerance)) {
           return false;
@@ -148,10 +147,8 @@ export const calculateCircleCredits = (circles, routes) => {
 
   circles.forEach(circle => {
     const {centerLng, centerLat, radius, credits } = circle;
-    // console.log(centerLng, centerLat, circle);
     for (let i = 0; i < routeSegments.length; i++) {
       const lineSeg = routeSegments[i];
-      // console.log(lineSeg[0], lineSeg[1]);
       if (isLineSegmentIntersectCircle(lineSeg[0], lineSeg[1], [centerLng, centerLat, radius])) {
         totalCredits += credits;
         break;
