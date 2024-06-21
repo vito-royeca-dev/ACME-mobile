@@ -3,10 +3,38 @@ import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { BACKEND_URL, MAP_PK_TOKEN } from "../constants";
+import { getUserId } from "../utils/auth";
 
 const instance = Axios.create({
     baseURL: BACKEND_URL,
 })
+
+export const updateLocation = async (location, distance) => {
+  try {
+    console.log('client update location');
+    const userId = await getUserId();
+    await instance.post('/api/users/update-distance-location', {
+      userId,
+      location,
+      distance,
+    });
+  } catch (e) {
+    console.error('Error updating location:', e);
+  }
+};
+
+export const updateCredits = async (credits) => {
+  console.log('client update credits');
+  try {
+    const userId = await getUserId();
+    await instance.post('/api/users/update-credits', {
+      userId,
+      credits,
+    });
+  } catch (e) {
+    console.error('Error updating credits:', e);
+  }
+};
 
 export const fetchTunnels = async () => {
     try {

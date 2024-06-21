@@ -18,9 +18,12 @@ export const useMapData = () => {
         // Filter visible tunnels and get their routes
         const tunnelDataPromises = tunnels.filter(t => t.visible).map(async (tunnel) => {
           const routes = await getRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
+          console.log(routes[0].geometry.coordinates, "================================");
           let coordinates = [];
+          let distance = 0;
           if (routes?.length > 0) {
             coordinates = routes[0].geometry.coordinates;
+            distance = routes[0].distance;
           }
           return {
             ...tunnel,
@@ -109,5 +112,12 @@ export const useMapData = () => {
     fetchZones(setZones);
   }
 
-  return {tunnelInfos, zones};
+  const filteredTunnels = tunnelInfos.filter(t => t.visible);
+  const filteredZones = zones.filter(z => z.visible);
+
+  
+  return {
+    tunnelInfos: filteredTunnels, 
+    zones: filteredZones,
+  };
 }

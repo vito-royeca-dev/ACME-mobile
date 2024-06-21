@@ -11,17 +11,18 @@ import { getRoute } from '../lib/apis';
 import { styles } from '../stylesheet/selectedTunnels';
 
 const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
-  const [location] = useLocation();
+  const [location] = useLocation(tunnels, zones);
   const [routeCoords, setRouteCoords] = useState([]);
   const [routeCoords1, setRouteCoords1] = useState([]);
 
   const [routeInfo, setRouteInfo] = useState(null);
   const [routeInfo1, setRouteInfo1] = useState(null);
+
   useEffect(() => {
     const fetchRoute = async () => {
       const routes = await getRoute(location, endCoords, true);
+      if (!routes || routes?.length === 0) return;
       const [data, data1] = routes;
-      
       if (!data) {
         setRouteInfo(null);
         setRouteInfo1(null);
@@ -53,7 +54,7 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
     if (location?.length === 2 && endCoords?.length === 2) {
       fetchRoute();
     }
-  }, [endCoords]); // Depend on coordinates to refetch when they change
+  }, [endCoords, JSON.stringify(location)]); // Depend on coordinates to refetch when they change
 
   return (
     <>

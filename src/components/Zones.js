@@ -5,7 +5,7 @@ import { memo } from "react";
 export const Zones = ({zones}) => {
 
   return <>
-    {zones.filter(z => z.visible).map((zone, index) => (
+    {zones.map((zone, index) => (
       <MapboxGL.ShapeSource
         key={`zone-${index}`} // Ensure a unique key based on zone ID or another unique identifier
         id={`zone-${index}`}

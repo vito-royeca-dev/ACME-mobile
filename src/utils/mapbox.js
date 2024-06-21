@@ -110,7 +110,17 @@ const haversineDistance = (point1, point2) => {
   return earthRadiusMiles * c;
 };
 
-const pointOnRoute = (point, route, tolerance) => {
+export const isPointInCircle = (point, center, radius) => {
+  
+  const [lon1, lat1] = point;
+  const [lon2, lat2] = center;
+  const distance = haversineDistance([lon1, lat1], [lon2, lat2]);
+  // console.log("distance:=>>>   ",distance, "radius:==>>  ", radius * 1.60934);
+  // console.log(distance <= radius * 1.60934, '< ==== res');
+  return distance <= radius;
+};
+
+export const pointOnRoute = (point, route, tolerance) => {
   for (let i = 0; i < route.length - 1; i++) {
       const segmentStart = route[i];
       const segmentEnd = route[i + 1];
@@ -176,3 +186,18 @@ export const calculateCredits = (baseRoute, circles, tunnels) => {
 
   return circleCredits + tunnelCredits;
 }
+
+export const calculateDistance = (loc1, loc2) => {
+  const R = 6371; // Radius of the Earth in km
+  const dLat = toRadians(loc2.latitude - loc1.latitude);
+  const dLon = toRadians(loc2.longitude - loc1.longitude);
+  const lat1 = toRadians(loc1.latitude);
+  const lat2 = toRadians(loc2.latitude);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c; // Distance in km
+  return d;
+};

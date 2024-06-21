@@ -3,7 +3,7 @@ import { memo } from "react";
 
 export const Tunnels = ({tunnels}) => {
   return <>
-   {tunnels.filter(t => t.visible).map((tunnel) => (
+   {tunnels.map((tunnel) => (
       <Tunnel 
         key={tunnel._id}
         id={tunnel._id}
