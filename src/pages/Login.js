@@ -8,7 +8,7 @@ import { styles } from '../stylesheet/login';
 
 GoogleSignin.configure({
   androidClientId: ANDROID_CKIENT_ID,
-  iosClientId: IOS_CLIENT_ID, // From Google Console
+  iosClientId: IOS_CLIENT_ID, 
 });
 
 const LoginScreen = ({ onLogin }) => {

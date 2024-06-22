@@ -18,16 +18,16 @@ export const useMapData = () => {
         // Filter visible tunnels and get their routes
         const tunnelDataPromises = tunnels.filter(t => t.visible).map(async (tunnel) => {
           const routes = await getRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
-          console.log(routes[0].geometry.coordinates, "================================");
           let coordinates = [];
           let distance = 0;
           if (routes?.length > 0) {
             coordinates = routes[0].geometry.coordinates;
-            distance = routes[0].distance;
+            distance = routes[0].distance * 0.000621371;
           }
           return {
             ...tunnel,
             coordinates,
+            distance: distance
           };
         });
         // Wait for all promises to resolve
@@ -42,7 +42,6 @@ export const useMapData = () => {
   }, [])
 
   useEffect(() => {
-    // console.log(socket.on);
     const socketListener = socket.on(ZONE_TUNNEL_CHANGE, async ({action, type, data}) => {
       if (type === "tunnel") {
         switch (action) {

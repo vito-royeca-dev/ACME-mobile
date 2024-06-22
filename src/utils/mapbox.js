@@ -97,7 +97,7 @@ const isLineSegmentIntersectCircle = (start, end, circle) => {
   return false;
 };
 
-const haversineDistance = (point1, point2) => {
+export const haversineDistance = (point1, point2) => {
   const [lon1, lat1] = point1.map(toRadians);
   const [lon2, lat2] = point2.map(toRadians);
   
@@ -115,8 +115,7 @@ export const isPointInCircle = (point, center, radius) => {
   const [lon1, lat1] = point;
   const [lon2, lat2] = center;
   const distance = haversineDistance([lon1, lat1], [lon2, lat2]);
-  // console.log("distance:=>>>   ",distance, "radius:==>>  ", radius * 1.60934);
-  // console.log(distance <= radius * 1.60934, '< ==== res');
+  
   return distance <= radius;
 };
 

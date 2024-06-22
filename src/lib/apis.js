@@ -11,7 +11,6 @@ const instance = Axios.create({
 
 export const updateLocation = async (location, distance) => {
   try {
-    console.log('client update location');
     const userId = await getUserId();
     await instance.post('/api/users/update-distance-location', {
       userId,
@@ -24,7 +23,6 @@ export const updateLocation = async (location, distance) => {
 };
 
 export const updateCredits = async (credits) => {
-  console.log('client update credits');
   try {
     const userId = await getUserId();
     await instance.post('/api/users/update-credits', {
@@ -79,7 +77,6 @@ export const signIn = async (callback) => {
     const data = await response.json();
     if (response.ok) {
       // Store user info and token
-      console.log(data.id);
       await AsyncStorage.setItem('user', data.id);
       await AsyncStorage.setItem('token', data.token);
       Alert.alert('Sign-In Successful', `Welcome to the app! ${userInfo.user.givenName}!`);

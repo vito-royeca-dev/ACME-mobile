@@ -15,17 +15,18 @@ export const styles = StyleSheet.create({
   },
   location: {
     position: 'absolute',
-    bottom: 30,
-    left: 30,
+    top: 90,
+    left: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 10,
     borderRadius: 5,
   },
   zoomControls: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 70,
     right: 10,
     flexDirection: 'column',
+    zIndex: 3,
   },
   zoomButton: {
     backgroundColor: 'white',

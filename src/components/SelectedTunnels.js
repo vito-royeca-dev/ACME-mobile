@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, FlatList  } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import UserAnnotation from './UserAnnotation';
@@ -11,12 +11,14 @@ import { getRoute } from '../lib/apis';
 import { styles } from '../stylesheet/selectedTunnels';
 
 const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
-  const [location] = useLocation(tunnels, zones);
+  const [location, enteredZoneIndexes] = useLocation(tunnels, zones);
   const [routeCoords, setRouteCoords] = useState([]);
   const [routeCoords1, setRouteCoords1] = useState([]);
 
   const [routeInfo, setRouteInfo] = useState(null);
   const [routeInfo1, setRouteInfo1] = useState(null);
+
+  const enteredZones = zones.filter(({_id} ) => enteredZoneIndexes.includes(_id));
 
   useEffect(() => {
     const fetchRoute = async () => {
@@ -123,6 +125,12 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
         )}
       </View>
       <UserAnnotation location={location} />
+
+      <View style={styles.messagesContainer}>
+        {enteredZones.map(({message, _id}) => (
+          <Text style={styles.message} key={_id}>{message}</Text>
+        )) }
+      </View>
     </>
   );
 };
