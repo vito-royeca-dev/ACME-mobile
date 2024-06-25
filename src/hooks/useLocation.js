@@ -7,10 +7,10 @@ import { updateCredits, updateLocation } from '../lib/apis';
 Geolocation.setRNConfiguration({skipPermissionRequests: true});
 
 export const useLocation = (tunnels, zones) => {
-  const [location, setLocation] = useState({latitude: 40.32, longitude: 90.34});
+  const [location, setLocation] = useState({});
   const [enteredZones, setEnteredZones] = useState([]);
   const [passedTunnels, setPassedTunnels] = useState([]);
-  const [val, setVal] = useState(0);
+  // const [val, setVal] = useState(0);
 
   // const arr = [
   //   [-114.989484, 32.021166], [-114.989626, 32.027544], [-114.99592, 32.189131], [-115.001955, 32.193967],
@@ -142,10 +142,8 @@ export const useLocation = (tunnels, zones) => {
     if (tunnels.length === tunnelflag) setPassedTunnels([]);
 
     if (credits > 0) updateCredits(credits);
-    updateLocation(location, 10);
 
   }, [location]);
 
-  
   return [[location?.longitude, location?.latitude], enteredZones];
 };

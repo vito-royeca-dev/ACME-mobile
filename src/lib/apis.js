@@ -62,8 +62,8 @@ export const signIn = async (callback) => {
     // Send ID token to server
     const idToken = userInfo.idToken;
     const platform = Platform.OS;
-
-    const response = await fetch('http://localhost:5000/auth/google', {
+    console.log(platform);
+    const response = await fetch(`${BACKEND_URL}/auth/google`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const signIn = async (callback) => {
         platform,
       }),
     });
-
+    console.log(response);
     const data = await response.json();
     if (response.ok) {
       // Store user info and token
@@ -93,6 +93,7 @@ export const signIn = async (callback) => {
       console.log('Play services not available or outdated');
     } else {
       console.error('Some other error:', error);
+      console.log(JSON.stringify(error));
     }
   }
 }
