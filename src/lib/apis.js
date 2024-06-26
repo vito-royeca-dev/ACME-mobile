@@ -2,7 +2,7 @@ import { Alert, Platform } from "react-native";
 import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { BACKEND_URL, MAP_PK_TOKEN } from "../constants";
+import { ANDROID_CKIENT_ID, BACKEND_URL, IOS_CLIENT_ID, MAP_PK_TOKEN } from "../constants";
 import { getUserId } from "../utils/auth";
 
 const instance = Axios.create({
@@ -56,9 +56,15 @@ export const fetchZones = async (callback) => {
 
 export const signIn = async (callback) => { 
   try {
+    GoogleSignin.configure({
+      androidClientId: ANDROID_CKIENT_ID,
+      iosClientId: IOS_CLIENT_ID,
+    });
+
     await GoogleSignin.hasPlayServices();
 
     const userInfo = await GoogleSignin.signIn();
+    console.log(userInfo);
     // Send ID token to server
     const idToken = userInfo.idToken;
     const platform = Platform.OS;
