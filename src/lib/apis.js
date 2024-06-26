@@ -2,7 +2,7 @@ import { Alert, Platform } from "react-native";
 import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { ANDROID_CKIENT_ID, BACKEND_URL, IOS_CLIENT_ID, MAP_PK_TOKEN } from "../constants";
+import { ANDROID_CKIENT_ID, BACKEND_URL, IOS_CLIENT_ID, MAP_PK_TOKEN, WEB_CLIENT_ID } from "../constants";
 import { getUserId } from "../utils/auth";
 
 const instance = Axios.create({
