@@ -128,7 +128,7 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
 
       <View style={styles.messagesContainer}>
         {enteredZones.map(({message, _id}) => (
-          <Text style={styles.message} key={_id}>{message}</Text>
+          <Text style={styles.message} key={String(_id)}>{message}</Text>
         )) }
       </View>
     </>
