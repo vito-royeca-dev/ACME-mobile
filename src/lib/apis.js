@@ -59,16 +59,15 @@ export const signIn = async (callback) => {
     GoogleSignin.configure({
       androidClientId: ANDROID_CKIENT_ID,
       iosClientId: IOS_CLIENT_ID,
+      webClientId: WEB_CLIENT_ID,
     });
 
     await GoogleSignin.hasPlayServices();
 
     const userInfo = await GoogleSignin.signIn();
-    console.log(userInfo);
     // Send ID token to server
     const idToken = userInfo.idToken;
     const platform = Platform.OS;
-    console.log(platform);
     const response = await fetch(`${BACKEND_URL}/auth/google`, {
       method: 'POST',
       headers: {
@@ -79,7 +78,6 @@ export const signIn = async (callback) => {
         platform,
       }),
     });
-    console.log(response);
     const data = await response.json();
     if (response.ok) {
       // Store user info and token
