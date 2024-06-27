@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { styles } from "../stylesheet/routeInfo"
 
 const RouteInfo = ({routeInfo, routeInfo1}) => {
