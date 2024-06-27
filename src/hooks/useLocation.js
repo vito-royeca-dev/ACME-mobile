@@ -31,13 +31,13 @@ export const useLocation = (tunnels, zones) => {
   // useEffect(() => {
   //   // Update location based on array of coordinates using setTimeout
   //   const updateLocationWithTimeout = (index) => {
-  //       setTimeout(() => {
-  //         setLocation(prev => ({
-  //           latitude: prev.latitude + 0.1,
-  //           longitude: prev.longitude + 0.1
-  //         }));
-  //         setVal(index + 1);
-  //       }, 1000);
+  //     setTimeout(() => {
+  //       setLocation((prev) => ({
+  //         latitude: prev.latitude ? 0 : prev.latitude + 0.1,
+  //         longitude: prev.latitude ? 0 : prev.longitude + 0.1
+  //       }));
+  //       setVal(index + 1);
+  //     }, 1000);
   //   };
 
   //   updateLocationWithTimeout(val);
@@ -46,6 +46,8 @@ export const useLocation = (tunnels, zones) => {
   // }, [val]);
 
   useEffect(() => {
+    let watchId = null;
+
     const getLocation = async () => {
       const hasPermission = await requestPermissions();
 
@@ -66,7 +68,7 @@ export const useLocation = (tunnels, zones) => {
         },
       );
 
-      const watchId = Geolocation.watchPosition(
+      watchId = Geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           const diff = calculateDistance(position.coords, location) * 0.621371;
@@ -77,13 +79,15 @@ export const useLocation = (tunnels, zones) => {
           console.log(err);
         },
       );
-      
-      return () => {
-        Geolocation.clearWatch(watchId);
-      };
     };
 
     getLocation();
+
+    return () => {
+      if (watchId) {
+        Geolocation.clearWatch(watchId);
+      }
+    }
   }, []);
 
   useEffect(() => {
