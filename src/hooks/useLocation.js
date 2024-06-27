@@ -57,8 +57,9 @@ export const useLocation = (tunnels, zones) => {
       Geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          const diff = 0;
           setLocation({ latitude, longitude });
-          
+          updateLocation(position.coords, diff);
         },
         err => {
           console.log(err);
@@ -69,11 +70,8 @@ export const useLocation = (tunnels, zones) => {
         (position) => {
           const { latitude, longitude } = position.coords;
           const diff = calculateDistance(position.coords, location) * 0.621371;
-          if (diff >= 0.05) {
-            setLocation({ latitude, longitude });
-            // send location and distance change
-            updateLocation(position.coords, diff);
-          }
+          setLocation({ latitude, longitude });
+          updateLocation(position.coords, diff);
         },
         err => {
           console.log(err);

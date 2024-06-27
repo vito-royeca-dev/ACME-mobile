@@ -13,10 +13,12 @@ const instance = Axios.create({
 export const updateLocation = async (location, distance) => {
   try {
     const userId = await getUserId();
+    const diff = distance ? distance : 0;
+    
     await instance.post('/api/users/update-distance-location', {
       userId,
       location,
-      distance,
+      distance: diff,
     });
   } catch (e) {
     console.error('Error updating location:', e);
