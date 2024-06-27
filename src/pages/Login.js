@@ -1,15 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Image, ImageBackground, Animated, TouchableOpacity, Text } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { signIn } from '../lib/apis';
-import { IOS_CLIENT_ID, ANDROID_CKIENT_ID } from '../constants';
 import { styles } from '../stylesheet/login';
-
-GoogleSignin.configure({
-  androidClientId: ANDROID_CKIENT_ID,
-  iosClientId: IOS_CLIENT_ID, 
-});
 
 const LoginScreen = ({ onLogin }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;

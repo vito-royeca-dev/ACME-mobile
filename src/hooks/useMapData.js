@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import { fetchTunnels, fetchZones, getRoute } from "../lib/apis";
 import { socket } from "../socket";
 import { ZONE_TUNNEL_CHANGE } from "../types/eventTypes";
@@ -15,11 +16,11 @@ export const useMapData = () => {
     const fetchTunnelInfos = async () => {
       const tunnels = await fetchTunnels();
       if (tunnels.length > 0) {
-        // Filter visible tunnels and get their routes
         const tunnelDataPromises = tunnels.filter(t => t.visible).map(async (tunnel) => {
           const routes = await getRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
           let coordinates = [];
           let distance = 0;
+
           if (routes?.length > 0) {
             coordinates = routes[0].geometry.coordinates;
             distance = routes[0].distance * 0.000621371;
@@ -30,7 +31,7 @@ export const useMapData = () => {
             distance: distance
           };
         });
-        // Wait for all promises to resolve
+
         const tunnelData = await Promise.all(tunnelDataPromises);
         setTunnelInfos(tunnelData);
       } else {
@@ -49,13 +50,16 @@ export const useMapData = () => {
             {
               const routes = await getRoute([data.startLng, data.startLat], [data.endLng, data.endLat]);
               let coordinates = [];
+              
               if (routes?.length > 0) {
                 coordinates = routes[0].geometry.coordinates;
               }
+
               const tunnelInfo = {
                 ...data,
                 coordinates,
               };
+
               setTunnelInfos(prev => ([
                 ...prev,
                 tunnelInfo
@@ -66,13 +70,16 @@ export const useMapData = () => {
             {
               const routes = await getRoute([data.startLng, data.startLat], [data.endLng, data.endLat]);
               let coordinates = [];
+
               if (routes?.length > 0) {
                 coordinates = routes[0].geometry.coordinates;
               }
+
               const tunnelInfo = {
                 ...data,
                 coordinates,
               };
+
               setTunnelInfos(prev => prev.map(t => t._id === tunnelInfo._id ? tunnelInfo : t));
             }
             break;
@@ -113,7 +120,6 @@ export const useMapData = () => {
 
   const filteredTunnels = tunnelInfos.filter(t => t.visible);
   const filteredZones = zones.filter(z => z.visible);
-
   
   return {
     tunnelInfos: filteredTunnels, 

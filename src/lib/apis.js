@@ -2,6 +2,7 @@ import { Alert, Platform } from "react-native";
 import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+
 import { ANDROID_CKIENT_ID, BACKEND_URL, IOS_CLIENT_ID, MAP_PK_TOKEN, WEB_CLIENT_ID } from "../constants";
 import { getUserId } from "../utils/auth";
 
@@ -35,23 +36,23 @@ export const updateCredits = async (credits) => {
 };
 
 export const fetchTunnels = async () => {
-    try {
-      const response = await instance.get('/api/tunnels');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching tunnels:', error);
-      return [];
-    }
+  try {
+    const response = await instance.get('/api/tunnels');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tunnels:', error);
+    return [];
+  }
 };
 
 export const fetchZones = async (callback) => {
-    try {
-      const response = await instance.get('/api/zones');
-      callback(response.data);
-    } catch (error) {
-      console.error('Error fetching zones:', error);
-      callback([]);
-    }
+  try {
+    const response = await instance.get('/api/zones');
+    callback(response.data);
+  } catch (error) {
+    console.error('Error fetching zones:', error);
+    callback([]);
+  }
 };
 
 export const signIn = async (callback) => { 

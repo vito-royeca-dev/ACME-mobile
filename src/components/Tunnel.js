@@ -6,8 +6,8 @@ export const Tunnel = ({ coordinates, lineColor = '#FF0000', opacity = 1, id = 1
     <>
       {coordinates?.length > 0 && (
         <MapboxGL.ShapeSource
-          id={`routeSource-${id}`} // Ensure unique ID for each instance
-          key={`routeSource-${id}`} // Force re-render on route change
+          id={`routeSource-${id}`}
+          key={`routeSource-${id}`}
           shape={{
             type: 'Feature',
             geometry: {
@@ -17,7 +17,7 @@ export const Tunnel = ({ coordinates, lineColor = '#FF0000', opacity = 1, id = 1
           }}
         >
           <MapboxGL.LineLayer
-            id={`routeLayer-${id}`} // Ensure unique ID for each instance
+            id={`routeLayer-${id}`}
             style={{
               lineColor,
               lineWidth: 3,

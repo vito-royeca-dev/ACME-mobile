@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from 'react';
-import { View, Text, FlatList  } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import UserAnnotation from './UserAnnotation';
@@ -8,17 +7,26 @@ import { useLocation } from '../hooks/useLocation';
 
 import { calculateCredits, formatDistance, formatDuration } from '../utils/mapbox';
 import { getRoute } from '../lib/apis';
-import { styles } from '../stylesheet/selectedTunnels';
 
-const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
+const SelectedTunnels = 
+({ 
+  endCoords, 
+  tunnels, 
+  zones, 
+  setRouteInfo, 
+  setRouteInfo1, 
+  setEnteredZones 
+}) => 
+{
   const [location, enteredZoneIndexes] = useLocation(tunnels, zones);
   const [routeCoords, setRouteCoords] = useState([]);
-  const [routeCoords1, setRouteCoords1] = useState([]);
+  const [routeCoords1, setRouteCoords1] = useState([])
 
-  const [routeInfo, setRouteInfo] = useState(null);
-  const [routeInfo1, setRouteInfo1] = useState(null);
-
-  const enteredZones = zones.filter(({_id} ) => enteredZoneIndexes.includes(_id));
+  useEffect(() => {
+    console.log(2);
+    const enteredZones = zones.filter(({_id} ) => enteredZoneIndexes.includes(_id));
+    setEnteredZones(enteredZones)
+  }, [JSON.stringify(enteredZoneIndexes), JSON.stringify(zones)]);
 
   useEffect(() => {
     const fetchRoute = async () => {
@@ -56,15 +64,15 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
     if (location?.length === 2 && endCoords?.length === 2) {
       fetchRoute();
     }
-  }, [endCoords, JSON.stringify(location)]); // Depend on coordinates to refetch when they change
+  }, [endCoords, JSON.stringify(location)]);
 
   return (
     <>
       {routeCoords?.length > 0 && (
         <>
           <MapboxGL.ShapeSource
-            id="routeSource-selected-1" // Ensure unique ID for each instance
-            key="routeSource-selected-1" // Force re-render on route change
+            id="routeSource-selected-1"
+            key="routeSource-selected-1"
             shape={{
               type: 'Feature',
               geometry: {
@@ -74,7 +82,7 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
             }}
           >
             <MapboxGL.LineLayer
-              id="routeLayer-selected-1" // Ensure unique ID for each instance
+              id="routeLayer-selected-1"
               style={{
                 lineColor: '#FF0000',
                 lineWidth: 3,
@@ -87,8 +95,8 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
       {routeCoords1?.length > 0 && (
         <>
           <MapboxGL.ShapeSource
-            id="routeSource-selected-2" // Ensure unique ID for each instance
-            key="routeSource-selected-2" // Force re-render on route change
+            id="routeSource-selected-2"
+            key="routeSource-selected-2"
             shape={{
               type: 'Feature',
               geometry: {
@@ -98,7 +106,7 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
             }}
           >
             <MapboxGL.LineLayer
-              id="routeLayer-selected-2" // Ensure unique ID for each instance
+              id="routeLayer-selected-2"
               style={{
                 lineColor: '#0000ff',
                 lineWidth: 3,
@@ -108,29 +116,7 @@ const SelectedTunnels = ({ endCoords, tunnels, zones }) => {
           </MapboxGL.ShapeSource>
         </>
       )}
-      <View style={styles.infoContainer}>
-        {routeInfo && (
-          <View style={styles.infoBox1}>
-            <Text>Distance: {routeInfo.distance}</Text>
-            <Text>ETA: {routeInfo.duration}</Text>
-            <Text>Credit: {routeInfo.credits}</Text>
-          </View>
-        )}
-        {routeInfo1 && (
-          <View style={styles.infoBox2}>
-            <Text>Distance: {routeInfo1.distance}</Text>
-            <Text>ETA: {routeInfo1.duration}</Text>
-            <Text>Credit: {routeInfo1.credits}</Text>
-          </View>
-        )}
-      </View>
       <UserAnnotation location={location} />
-
-      <View style={styles.messagesContainer}>
-        {enteredZones.map(({message, _id}) => (
-          <Text style={styles.message} key={String(_id)}>{message}</Text>
-        )) }
-      </View>
     </>
   );
 };

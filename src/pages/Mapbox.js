@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import MapboxGL from '@rnmapbox/maps'; // Import from '@rnmapbox/maps' for older versions
+import MapboxGL from '@rnmapbox/maps';
 
 import Zones from '../components/Zones';
 import Tunnels from '../components/Tunnels';
 import SelectedTunnels from '../components/SelectedTunnels';
+import RouteInfo from '../components/RouteInfo';
+import Messages from '../components/Messages';
 
 import { useMapData } from '../hooks/useMapData';
 import { useCamera } from '../hooks/useCamera';
@@ -15,6 +17,10 @@ import { styles } from '../stylesheet/mapbox';
 
 const MapboxScreen = () => {
   const [selectedLocation, setSelectedLocation] = useState();
+  const [routeInfo, setRouteInfo] = useState(null);
+  const [routeInfo1, setRouteInfo1] = useState(null);
+  const [enteredZones, setEnteredZones] = useState([]);
+
   const {tunnelInfos, zones} = useMapData();
   const {viewInfo, handleCameraChange} = useViewinfo();
   const {cameraRef, handleZoomIn, handleZoomOut} = useCamera();
@@ -39,7 +45,14 @@ const MapboxScreen = () => {
           />
           <Tunnels tunnels={tunnelInfos} />
           <Zones zones={zones}/>
-          <SelectedTunnels endCoords={selectedLocation} tunnels={tunnelInfos} zones={zones} />
+          <SelectedTunnels 
+            endCoords={selectedLocation} 
+            setRouteInfo={setRouteInfo} 
+            setRouteInfo1={setRouteInfo1} 
+            setEnteredZones={setEnteredZones}
+            tunnels={tunnelInfos} 
+            zones={zones} 
+          />
         </MapboxGL.MapView>
         <View style={styles.location}>
           <Text>Lat: {viewInfo.latitude.toFixed(1)} | Lng: {viewInfo.longitude.toFixed(2)} | Zoom: {viewInfo.zoomLevel.toFixed(2)}</Text>
@@ -53,6 +66,11 @@ const MapboxScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <RouteInfo 
+        routeInfo={routeInfo}
+        routeInfo1={routeInfo1}
+      />
+      <Messages enteredZones={enteredZones} />
     </View>
   );
 };
