@@ -140,25 +140,37 @@ export const pointOnRoute = (point, route, tolerance) => {
   return false;
 };
 
-const routeOnRoute = (baseRouteinfo, comparisonRoute) => {
-  const tolerance = baseRouteinfo.distance * 0.000621371 * 0.005; // Set tolerance as 1% of the total route length
-  for (const point of comparisonRoute) {
-      if (!pointOnRoute(point, baseRouteinfo?.geometry?.coordinates, tolerance)) {
-          return false;
-      }
-  }
+const routeOnRoute = (baseCoords, comparisonRoute) => {
+  const baseCoordsLength = baseCoords.length;
+  const compCoordsLength = comparisonRoute.length;
+
+  if (baseCoordsLength < compCoordsLength) return false;
+
+  const [flng, flat] = compCoordsLength[1];
+  baseCoords.find(([lng, lat]) => lng === flng && lat === flat);
   return true;
 };
 
+const isSubarray = (subarray, array) => {
+  if (subarray.length > array.length) {
+    return false;
+  }
+
+  return array.some((_, index) => 
+    array.slice(index, index + subarray.length).every((val, i) => 
+      val[0] === subarray[i][0] && val[1] === subarray[i][1]
+    )
+  );
+};
+
 export const calculateCircleCredits = (circles, routes) => {
-  const routeSegments = polylineToSegments(routes);
   let totalCredits = 0;
 
   circles.forEach(circle => {
     const {centerLng, centerLat, radius, credits } = circle;
-    for (let i = 0; i < routeSegments.length; i++) {
-      const lineSeg = routeSegments[i];
-      if (isLineSegmentIntersectCircle(lineSeg[0], lineSeg[1], [centerLng, centerLat, radius])) {
+    for (let i = 0; i < routes.length; i++) {
+      const coord = routes[i];
+      if (isPointInCircle(coord, [centerLng, centerLat], radius)) {
         totalCredits += credits;
         break;
       }
@@ -168,22 +180,15 @@ export const calculateCircleCredits = (circles, routes) => {
   return totalCredits;
 }
 
-export const calculateTunnelCredits = (baseRouteinfo, tunnels) => {
+export const calculateTunnelCredits = (baseCoords, tunnels) => {
   let total = 0;
   tunnels.map(comparationTunnel => {
-    if (routeOnRoute(baseRouteinfo, comparationTunnel.coordinates)) {
+    if (isSubarray((comparationTunnel.coordinates).slice(1, -1), baseCoords)) {
         total += comparationTunnel.credits;
     }
   });
 
   return total;
-}
-
-export const calculateCredits = (baseRoute, circles, tunnels) => {
-  const circleCredits = calculateCircleCredits(circles, baseRoute?.geometry?.coordinates);
-  const  tunnelCredits = calculateTunnelCredits(baseRoute, tunnels);
-
-  return circleCredits + tunnelCredits;
 }
 
 export const calculateDistance = (loc1, loc2) => {
@@ -200,3 +205,11 @@ export const calculateDistance = (loc1, loc2) => {
   const d = R * c; // Distance in km
   return d;
 };
+
+export const calculateCredits = (baseCoords, circles, tunnels) => {
+  const circleCredits = calculateCircleCredits(circles, baseCoords);
+  const  tunnelCredits = calculateTunnelCredits(baseCoords, tunnels);
+
+  return circleCredits + tunnelCredits;
+}
+

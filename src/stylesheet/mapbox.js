@@ -39,5 +39,18 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-
+  toggleButton: {
+    position: 'absolute',
+    top: 100,
+    left: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+    opacity: 0.7
+  },
+  toggleButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
 });

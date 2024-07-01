@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { fetchTunnels, fetchZones, getRoute } from "../lib/apis";
+import { fetchTunnels, fetchZones, getOneRoute } from "../lib/apis";
 import { socket } from "../socket";
 import { ZONE_TUNNEL_CHANGE } from "../types/eventTypes";
 
@@ -17,18 +17,11 @@ export const useMapData = () => {
       const tunnels = await fetchTunnels();
       if (tunnels.length > 0) {
         const tunnelDataPromises = tunnels.filter(t => t.visible).map(async (tunnel) => {
-          const routes = await getRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
-          let coordinates = [];
-          let distance = 0;
-
-          if (routes?.length > 0) {
-            coordinates = routes[0].geometry.coordinates;
-            distance = routes[0].distance * 0.000621371;
-          }
+          const coordinates = await getOneRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
+          
           return {
             ...tunnel,
             coordinates,
-            distance: distance
           };
         });
 
@@ -48,13 +41,8 @@ export const useMapData = () => {
         switch (action) {
           case "create":
             {
-              const routes = await getRoute([data.startLng, data.startLat], [data.endLng, data.endLat]);
-              let coordinates = [];
+              const coordinates = await getOneRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
               
-              if (routes?.length > 0) {
-                coordinates = routes[0].geometry.coordinates;
-              }
-
               const tunnelInfo = {
                 ...data,
                 coordinates,
@@ -68,13 +56,8 @@ export const useMapData = () => {
             break;
           case "update":
             {
-              const routes = await getRoute([data.startLng, data.startLat], [data.endLng, data.endLat]);
-              let coordinates = [];
-
-              if (routes?.length > 0) {
-                coordinates = routes[0].geometry.coordinates;
-              }
-
+              const coordinates = await getOneRoute([tunnel.startLng, tunnel.startLat], [tunnel.endLng, tunnel.endLat]);
+              
               const tunnelInfo = {
                 ...data,
                 coordinates,

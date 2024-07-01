@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   infoContainer: {
     position: 'absolute',
-    top: 50,
+    top: 100,
     right: 10,
   },
   infoBox1: {

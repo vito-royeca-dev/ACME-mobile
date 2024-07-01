@@ -1,25 +1,46 @@
-import { View, Text } from "react-native";
-import { styles } from "../stylesheet/routeInfo"
+import React, { useRef, useEffect } from 'react';
+import { View, Text, Animated, Easing } from 'react-native';
+import { styles } from '../stylesheet/routeInfo';
 
-const RouteInfo = ({routeInfo, routeInfo1}) => {
+const RouteInfo = ({ routeInfo, routeInfo1 }) => {
+  const fadeInAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (routeInfo || routeInfo1) {
+      Animated.timing(fadeInAnim, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(fadeInAnim, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [routeInfo, routeInfo1]);
+
   return (
-    <View style={styles.infoContainer}>
+    <Animated.View style={[styles.infoContainer, { opacity: fadeInAnim }]}>
       {routeInfo && (
         <View style={styles.infoBox1}>
-          <Text>Distance: {routeInfo.distance}</Text>
-          <Text>ETA: {routeInfo.duration}</Text>
-          <Text>Credit: {routeInfo.credits}</Text>
+          <Text style={styles.text}>Distance: {routeInfo.distance}</Text>
+          <Text style={styles.text}>ETA: {routeInfo.duration}</Text>
+          <Text style={styles.text}>Credit: {routeInfo.credits}</Text>
         </View>
       )}
       {routeInfo1 && (
         <View style={styles.infoBox2}>
-          <Text>Distance: {routeInfo1.distance}</Text>
-          <Text>ETA: {routeInfo1.duration}</Text>
-          <Text>Credit: {routeInfo1.credits}</Text>
+          <Text style={styles.text}>Distance: {routeInfo1.distance}</Text>
+          <Text style={styles.text}>ETA: {routeInfo1.duration}</Text>
+          <Text style={styles.text}>Credit: {routeInfo1.credits}</Text>
         </View>
       )}
-    </View>
-  )
-}
+    </Animated.View>
+  );
+};
 
 export default RouteInfo;
