@@ -13,6 +13,8 @@ const instance = Axios.create({
 })
 
 export const updateLocation = async (location, distance) => {
+  console.log("updating for server!!!!!");
+
   try {
     const userId = await getUserId();
     const diff = distance ? distance : 0;

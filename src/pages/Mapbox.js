@@ -25,7 +25,7 @@ const MapboxScreen = () => {
   const [routeInfo1, setRouteInfo1] = useState(null);
   const [enteredZones, setEnteredZones] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [mapStyle, setMapStyle] = useState(MapboxGL.StyleURL.Street);
+  const [mapStyle, setMapStyle] = useState(MapboxGL.StyleURL.SatelliteStreet);
   
   const { tunnelInfos, zones } = useMapData();
   const { viewInfo, handleCameraChange } = useViewinfo();

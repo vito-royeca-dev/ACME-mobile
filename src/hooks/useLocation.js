@@ -12,7 +12,10 @@ export const useLocation = (tunnels, zones) => {
   const [location, setLocation] = useState({});
   const [enteredZones, setEnteredZones] = useState([]);
   const [passedTunnels, setPassedTunnels] = useState([]);
+
   useEffect(() => {
+    let watchId;
+
     const getLocation = async () => {
       const hasPermission = await requestPermissions();
 
@@ -24,40 +27,41 @@ export const useLocation = (tunnels, zones) => {
       Geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          const diff = 0;
-
           setLocation({ latitude, longitude });
-          updateLocation(position.coords, diff);
+          updateLocation(position.coords, 0);
         },
         err => {
           console.log(err);
         },
-        {enableHighAccuracy: true},
+        { enableHighAccuracy: true },
       );
 
-      const watchId = Geolocation.watchPosition(
+      watchId = Geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          const diff = calculateDistance(position.coords, location) * 0.621371;
-          setLocation({ latitude, longitude });
-          updateLocation(position.coords, diff);
+          setLocation((prevLocation) => {
+            const diff = prevLocation.latitude && prevLocation.longitude
+              ? calculateDistance(position.coords, prevLocation) * 0.621371
+              : 0;
+              console.log(diff,"diffffff");
+            updateLocation(position.coords, diff);
+            return { latitude, longitude };
+          });
         },
         err => {
           console.log(err);
         },
-        {enableHighAccuracy: true},
+        { enableHighAccuracy: true },
       );
-
-      return watchId;
     };
 
-    const watchId = getLocation();
+    getLocation();
 
     return () => {
       if (watchId) {
         Geolocation.clearWatch(watchId);
       }
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -87,35 +91,32 @@ export const useLocation = (tunnels, zones) => {
 
       const tolerance = 0.0621371;
       const isFirstPointMatch = haversineDistance(startPoint, position) < tolerance;
-      const isSecondPointMatch = haversineDistance(endPoint, position) < tolerance
-;
+      const isSecondPointMatch = haversineDistance(endPoint, position) < tolerance;
       const pointInRoute = pointOnRoute(position, tunnel.coordinates, tolerance);
 
       if (foundTunnel !== undefined) {
         if (isFirstPointMatch && !(foundTunnel.fromStart)) {
           setPassedTunnels(prev => prev.filter(n => n._id !== tunnel._id));
-
           credits += tunnel.credits;
         } else if (isSecondPointMatch && foundTunnel.fromStart) {
           setPassedTunnels(prev => prev.filter(n => n._id !== tunnel._id));
-
           credits += tunnel.credits;
         } else if (!pointInRoute) {
           setPassedTunnels(prev => prev.filter(n => n._id !== tunnel._id));
         }
       } else {
         if (isFirstPointMatch) {
-          setPassedTunnels(prev => [...prev, {_id: tunnel._id, fromStart: true}])
+          setPassedTunnels(prev => [...prev, {_id: tunnel._id, fromStart: true}]);
         } else if (isSecondPointMatch) {
-          setPassedTunnels(prev => [...prev, {_id: tunnel._id, fromStart: false}])
+          setPassedTunnels(prev => [...prev, {_id: tunnel._id, fromStart: false}]);
         }
       }
       if (!pointInRoute) tunnelflag += 1;
-    })
+    });
+
     if (tunnels.length === tunnelflag) setPassedTunnels([]);
 
     if (credits > 0) updateCredits(credits);
-
   }, [location]);
 
   return [[location?.longitude, location?.latitude], enteredZones];
